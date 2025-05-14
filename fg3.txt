@@ -1,0 +1,13 @@
+A is a room. falling is Southeast of A. failing is East of falling. 
+
+The fg3  is a relatively-scheduled train-car in A. The waiting duration of the fg3  is 1 minute. The t-schedule of the fg3  is the Table of fg3 Schedule.
+
+Table of fg3 Schedule
+transit time	destination
+1 minute	A
+1 minute	falling
+1 minute	failing
+1 minute	going
+1 minute	failing
+1 minute	falling
+1 minute	A

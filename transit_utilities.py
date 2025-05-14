@@ -9,6 +9,41 @@ from datetime import datetime
 import networkx as nx
 import requests
 import pandas as pd
+import matplotlib.pyplot as plt
+
+import math
+
+
+def get_direction(x1, y1, x2, y2):
+    """
+    Returns the cardinal direction (e.g., 'North', 'Southwest')
+    from (x1, y1) to (x2, y2).
+    """
+    # Calculate angle in degrees
+    angle = math.degrees(math.atan2(y2 - y1, x2 - x1))
+    angle = (angle + 360) % 360  # Normalize to [0, 360)
+
+    # Define full-text directions
+    directions = [
+        (0, "East"),
+        (45, "Northeast"),
+        (90, "North"),
+        (135, "Northwest"),
+        (180, "West"),
+        (225, "Southwest"),
+        (270, "South"),
+        (315, "Southeast"),
+        (360, "East"),
+    ]
+
+    # Find the closest direction
+    for i in range(len(directions) - 1):
+        lower_angle, dir_name = directions[i]
+        upper_angle, _ = directions[i + 1]
+        if lower_angle <= angle < upper_angle:
+            return dir_name
+
+    return "East"  # Fallback
 
 
 def get_df(url):
@@ -155,6 +190,49 @@ transit time	destination
     return end_str
 
 
+def big_nx_to_if7(
+    G,
+    BIG_G: nx.Graph,
+    first_stop=None,
+    bidirectional=False,
+    bus_name="17 bus",
+    max_travel_time=None,
+):
+    g_pos = nx.spring_layout(BIG_G)
+    # TODO directionality
+    max_round = lambda x: max(1, round(x))
+    if max_travel_time:
+        max_round = lambda x: min(max_travel_time, max(1, round(x)))
+    stops = [str(n) for n in G.nodes]
+    if first_stop is None:
+        stop1 = stops.pop(0)
+    end_str = f"{stop1} is a room. "
+    last_stop = stop1
+    for s in range(len(stops) - 1):
+
+        next_s = stops[s + 1]
+        s = stops[s]
+        dir = get_direction(*g_pos[s], *g_pos[next_s])
+        end_str += f"{s} is {dir} of {last_stop}. "
+        last_stop = s
+    end_str += f"""\n\nThe {bus_name}  is a relatively-scheduled train-car in {stop1}. The waiting duration of the {bus_name}  is 1 minute. The t-schedule of the {bus_name}  is the Table of {bus_name} Schedule.\n"""
+    end_str += f"""
+Table of {bus_name} Schedule
+transit time	destination
+"""
+    for n in G.edges(data=True):
+        end_str += f"{max_round(n[2]['weight'])} minute\t{n[0]}\n"
+    # have to get the last one
+    n = [n for n in G.edges(data=True)][-1]
+    end_str += f"{max_round(n[2]['weight'])} minute\t{n[1]}\n"
+    if bidirectional:
+        for n in reversed([n for n in G.edges(data=True)]):
+            end_str += f"{max_round(n[2]['weight'])} minute\t{n[0]}\n"
+    # have to get the last one
+
+    return end_str
+
+
 # endsection
 def test17():
     # currently some functions are hardcoded
@@ -173,11 +251,52 @@ def making_for_game():
     for name, url in url_list.items():
         time_dict = df_to_travel_times(get_df(url))
         G = time_dict_to_digraph(time_dict)
+        pos = nx.spring_layout(G)
+        nx.draw(G, pos=pos)
+        nx.draw_networkx_labels(G, pos)
         with open(f"{name}.txt", "w+") as f:
             f.writelines(
                 nx_to_if7(G, bidirectional=True, bus_name=name, max_travel_time=3)
             )
 
+    plt.show()
+
+
+def list_to_dg(stop_names, fg):
+    for i in range(len(stop_names) - 1):
+        start = stop_names[i]
+        end = stop_names[i + 1]
+        fg.add_edge(start, end, weight=1)
+    return fg
+
+
+def multi_network_generator():
+    stop_names = ["first", "second", "third", "fourth"]
+    fg = nx.DiGraph()
+    fg = list_to_dg(stop_names, fg)
+    stop_names = ["A", "B", "second", "C", "D"]
+    fg2 = nx.DiGraph()
+    fg2 = list_to_dg(stop_names, fg2)
+    stop_names = ["A", "falling", "failing", "going"]
+    fg3 = nx.DiGraph()
+    fg3 = list_to_dg(stop_names, fg3)
+    cd = {"fg": fg, "fg2": fg2, "fg3": fg3}
+    big_g = nx.compose_all(cd.values())
+    global_pos = {}
+    with open(f"{name}.txt", "w+") as f:
+    for name, G in cd.items():
+        pos = nx.spring_layout(G)
+        for node, posit in pos.items():
+            if node not in global_pos:
+                global_pos[node] = posit
+            else:
+                pos[node] = global_pos[node]
+        f.writelines(
+            big_nx_to_if7(
+                G, big_g, bidirectional=True, bus_name=name, max_travel_time=3
+            )
+        )
+
 
 if __name__ == "__main__":
-    making_for_game()
+    multi_network_generator()

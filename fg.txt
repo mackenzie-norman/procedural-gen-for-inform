@@ -1,0 +1,13 @@
+first is a room. second is North of first. third is Northeast of second. 
+
+The fg  is a relatively-scheduled train-car in first. The waiting duration of the fg  is 1 minute. The t-schedule of the fg  is the Table of fg Schedule.
+
+Table of fg Schedule
+transit time	destination
+1 minute	first
+1 minute	second
+1 minute	third
+1 minute	fourth
+1 minute	third
+1 minute	second
+1 minute	first

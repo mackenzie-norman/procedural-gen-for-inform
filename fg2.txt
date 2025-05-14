@@ -1,0 +1,15 @@
+A is a room. B is North of A. second is Southwest of B. C is Southwest of second. 
+
+The fg2  is a relatively-scheduled train-car in A. The waiting duration of the fg2  is 1 minute. The t-schedule of the fg2  is the Table of fg2 Schedule.
+
+Table of fg2 Schedule
+transit time	destination
+1 minute	A
+1 minute	B
+1 minute	second
+1 minute	C
+1 minute	D
+1 minute	C
+1 minute	second
+1 minute	B
+1 minute	A
