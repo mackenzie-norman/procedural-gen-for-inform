@@ -1,0 +1,25 @@
+Gresham Central Transit Center is a room. W Powell & SW 181st is north of Gresham Central Transit Center. SE Powell & 122nd is north of W Powell & SW 181st. SE Powell & I-205 North On-Ramp is north of SE Powell & 122nd. SE Powell & 82nd is north of SE Powell & I-205 North On-Ramp. SE Powell & Cesar Chavez Blvd is north of SE Powell & 82nd. SE Powell & Milwaukie is north of SE Powell & Cesar Chavez Blvd. South Waterfront/S Moody is north of SE Powell & Milwaukie. SW 6th & Alder is north of South Waterfront/S Moody. NW 6th & Flanders is north of SW 6th & Alder. 
+
+The 9 Bus  is a relatively-scheduled train-car in Gresham Central Transit Center. The waiting duration of the 9 Bus  is 1 minute. The t-schedule of the 9 Bus  is the Table of 9 Bus Schedule.
+
+Table of 9 Bus Schedule
+transit time	destination
+3 minute	Gresham Central Transit Center
+3 minute	W Powell & SW 181st
+3 minute	SE Powell & 122nd
+3 minute	SE Powell & I-205 North On-Ramp
+3 minute	SE Powell & 82nd
+3 minute	SE Powell & Cesar Chavez Blvd
+3 minute	SE Powell & Milwaukie
+3 minute	South Waterfront/S Moody
+3 minute	SW 6th & Alder
+3 minute	NW 6th & Flanders
+3 minute	SW 6th & Alder
+3 minute	South Waterfront/S Moody
+3 minute	SE Powell & Milwaukie
+3 minute	SE Powell & Cesar Chavez Blvd
+3 minute	SE Powell & 82nd
+3 minute	SE Powell & I-205 North On-Ramp
+3 minute	SE Powell & 122nd
+3 minute	W Powell & SW 181st
+3 minute	Gresham Central Transit Center

@@ -1,0 +1,27 @@
+NE Dekum & 27th is a room. NE 24th & Fremont is north of NE Dekum & 27th. NE Broadway & 12th is north of NE 24th & Fremont. NW Irving & 6th is north of NE Broadway & 12th. SW 5th & Taylor is north of NW Irving & 6th. South Waterfront/S Moody is north of SW 5th & Taylor. SE Powell & 12th is north of South Waterfront/S Moody. SE 17th & Center is north of SE Powell & 12th. SE Holgate & Cesar Chavez Blvd is north of SE 17th & Center. SE Holgate & 83rd is north of SE Holgate & Cesar Chavez Blvd. SE Holgate & 122nd is north of SE Holgate & 83rd. 
+
+The 17 bus  is a relatively-scheduled train-car in NE Dekum & 27th. The waiting duration of the 17 bus  is 1 minute. The t-schedule of the 17 bus  is the Table of 17 bus Schedule.
+
+Table of 17 bus Schedule
+transit time	destination
+3 minute	NE Dekum & 27th
+3 minute	NE 24th & Fremont
+3 minute	NE Broadway & 12th
+3 minute	NW Irving & 6th
+3 minute	SW 5th & Taylor
+3 minute	South Waterfront/S Moody
+2 minute	SE Powell & 12th
+3 minute	SE 17th & Center
+3 minute	SE Holgate & Cesar Chavez Blvd
+3 minute	SE Holgate & 83rd
+3 minute	SE Holgate & 122nd
+3 minute	SE Holgate & 83rd
+3 minute	SE Holgate & Cesar Chavez Blvd
+3 minute	SE 17th & Center
+2 minute	SE Powell & 12th
+3 minute	South Waterfront/S Moody
+3 minute	SW 5th & Taylor
+3 minute	NW Irving & 6th
+3 minute	NE Broadway & 12th
+3 minute	NE 24th & Fremont
+3 minute	NE Dekum & 27th
