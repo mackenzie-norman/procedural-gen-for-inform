@@ -22,6 +22,10 @@ from selenium.webdriver.chrome.options import Options
 import time
 from bs4 import BeautifulSoup
 
+import networkx as nx
+import requests
+import pandas as pd
+
 
 def get_stops_from_map(bus_number) -> list:
     # Optional: Set up Chrome options (e.g., headless mode)
@@ -48,6 +52,7 @@ def get_stops_from_map(bus_number) -> list:
     return stops
 
 
+import networkx as nx
 import requests
 import pandas as pd
 
