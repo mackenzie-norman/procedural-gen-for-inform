@@ -1,0 +1,49 @@
+first street is a room. second ave is southeast of first street. third is southwest of second ave. fourth street is southwest of third. fifth street is south of fourth street. sixth street is east of fifth street. 
+
+The 18 Bus  is a relatively-scheduled train-car in first street. The waiting duration of the 18 Bus  is 1 minute. The t-schedule of the 18 Bus  is the Table of 18 Bus Schedule.
+
+Table of 18 Bus Schedule
+transit time	destination
+1 minute	first street
+1 minute	second ave
+1 minute	third
+1 minute	fourth street
+1 minute	fifth street
+1 minute	sixth street
+
+Park street is a room. B street is southeast of Park street. second ave is northeast of B street. C street is southeast of second ave. D street is east of C street. 
+
+The Green Line   is a relatively-scheduled train-car in Park street. The waiting duration of the Green Line   is 1 minute. The t-schedule of the Green Line   is the Table of Green Line  Schedule.
+
+Table of Green Line  Schedule
+transit time	destination
+1 minute	Park street
+1 minute	B street
+1 minute	second ave
+1 minute	C street
+1 minute	D street
+
+francais ave is a room. Park street is southeast of francais ave. marquam ave is east of Park street. crown park is east of marquam ave. 
+
+The 12 Bus  is a relatively-scheduled train-car in francais ave. The waiting duration of the 12 Bus  is 1 minute. The t-schedule of the 12 Bus  is the Table of 12 Bus Schedule.
+
+Table of 12 Bus Schedule
+transit time	destination
+1 minute	francais ave
+1 minute	Park street
+1 minute	marquam ave
+1 minute	crown park
+
+sixth street is a room. angel & 112th is northwest of sixth street. angel & 114th is northwest of angel & 112th. angel & 128th is northwest of angel & 114th. angel plaza is northwest of angel & 128th. crown park is east of angel plaza. 
+
+The Metro  is a relatively-scheduled train-car in sixth street. The waiting duration of the Metro  is 1 minute. The t-schedule of the Metro  is the Table of Metro Schedule.
+
+Table of Metro Schedule
+transit time	destination
+1 minute	sixth street
+1 minute	angel & 112th
+1 minute	angel & 114th
+1 minute	angel & 128th
+1 minute	angel plaza
+1 minute	crown park
+

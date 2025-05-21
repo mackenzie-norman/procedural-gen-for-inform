@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import time
+
+from phart import ASCIIRenderer
 from bs4 import BeautifulSoup
 
 from datetime import datetime
@@ -25,15 +27,15 @@ def get_direction(x1, y1, x2, y2):
 
     # Define full-text directions
     directions = [
-        (0, "East"),
-        (45, "Northeast"),
-        (90, "North"),
-        (135, "Northwest"),
-        (180, "West"),
-        (225, "Southwest"),
-        (270, "South"),
-        (315, "Southeast"),
-        (360, "East"),
+        (0, "east"),
+        (45, "northeast"),
+        (90, "north"),
+        (135, "northwest"),
+        (180, "west"),
+        (225, "southwest"),
+        (270, "south"),
+        (315, "southeast"),
+        (360, "east"),
     ]
 
     # Find the closest direction
@@ -208,9 +210,11 @@ def big_nx_to_if7(
         stop1 = stops.pop(0)
     end_str = f"{stop1} is a room. "
     last_stop = stop1
-    for s in range(len(stops) - 1):
-
-        next_s = stops[s + 1]
+    for s in range(len(stops)):
+        try:
+            next_s = stops[s + 1]
+        except:
+            next_s = stops[s]
         s = stops[s]
         dir = get_direction(*g_pos[s], *g_pos[next_s])
         end_str += f"{s} is {dir} of {last_stop}. "
@@ -270,33 +274,108 @@ def list_to_dg(stop_names, fg):
     return fg
 
 
+def generate_grid_if7():
+    stop_names1 = [
+        "first street",
+        "second ave",
+        "third",
+        "fourth street",
+        "fifth street",
+        "sixth street",
+    ]
+
+    stop_names2 = ["Park street", "B street", "C street", "D street"]
+    zipz = []
+
+    zipz = []
+    for street2 in stop_names2:
+        combined = [f"{street2} & {street1}" for street1 in stop_names1]
+        zipz.append(combined)
+    final_rows = []
+    for row in zipz:
+        new_row = [row[0]]
+        for i in range(len(row) - 1):
+            room_a = row[i]
+            room_b = row[i + 1]
+            new_row.append(f"bt{room_a}andbt{room_b}")
+            new_row.append(room_b)
+        final_rows.append(new_row)
+    # now from zipz I want to do the same but columnwise and then combine them
+
+    for i in range(len(zipz) - 1):
+        middle_row = []
+        for x in range(len(zipz[i])):
+            room_a = zipz[i][x]
+            room_b = zipz[i + 1][x]
+            middle_row.append(f"bt{room_a}andbt{room_b}")
+            middle_row.append(None)
+        final_rows.insert(i * 2 + 1, middle_row)
+    end_str = ""
+    for i in final_rows:
+        for room in i:
+            if room is not None:
+                end_str += f"{room} is a room.\n"
+    end_str += "\n\n"
+    # now for connections
+    # just write north east conncections
+    for i, row in enumerate(final_rows):
+        for x, room in enumerate(row):
+            if room is not None:
+                west_conn = None
+                north_conn = None
+                if x > 0:
+                    west_conn = row[x - 1]
+                if west_conn is not None:
+                    end_str += f"{room} is west of {west_conn}.\n"
+
+                if i > 0:
+                    north_conn = final_rows[i - 1][x]
+                if north_conn is not None:
+                    end_str += f"{room} is north of {north_conn}.\n"
+    print(end_str)
+
+
 def multi_network_generator():
-    stop_names = ["first", "second", "third", "fourth"]
+    stop_names = [
+        "first street",
+        "second ave",
+        "third",
+        "fourth street",
+        "fifth street",
+        "sixth street",
+    ]
     fg = nx.DiGraph()
     fg = list_to_dg(stop_names, fg)
-    stop_names = ["A", "B", "second", "C", "D"]
+    stop_names = ["Park street", "B street", "second ave", "C street", "D street"]
     fg2 = nx.DiGraph()
     fg2 = list_to_dg(stop_names, fg2)
-    stop_names = ["A", "falling", "failing", "going"]
+    stop_names = ["francais ave", "Park street", "marquam ave", "crown park"]
     fg3 = nx.DiGraph()
     fg3 = list_to_dg(stop_names, fg3)
-    cd = {"fg": fg, "fg2": fg2, "fg3": fg3}
+    stop_names = [
+        "sixth street",
+        "angel & 112th",
+        "angel & 114th",
+        "angel & 128th",
+        "angel plaza",
+        "crown park",
+    ]
+    fg4 = list_to_dg(stop_names, nx.DiGraph())
+    cd = {"18 Bus": fg, "Green Line ": fg2, "12 Bus": fg3, "Metro": fg4}
     big_g = nx.compose_all(cd.values())
     global_pos = {}
-    with open(f"{name}.txt", "w+") as f:
-    for name, G in cd.items():
-        pos = nx.spring_layout(G)
-        for node, posit in pos.items():
-            if node not in global_pos:
-                global_pos[node] = posit
-            else:
-                pos[node] = global_pos[node]
-        f.writelines(
-            big_nx_to_if7(
-                G, big_g, bidirectional=True, bus_name=name, max_travel_time=3
+    with open(f"big.txt", "w+") as f:
+        for name, G in cd.items():
+            f.writelines(
+                big_nx_to_if7(G, big_g, bus_name=name, max_travel_time=3) + "\n"
             )
-        )
+
+    pos = nx.spring_layout(big_g)
+    nx.draw(big_g, pos)
+    nx.draw_networkx_labels(big_g, pos)
+    plt.show()
 
 
 if __name__ == "__main__":
-    multi_network_generator()
+    # multi_network_generator()
+    generate_grid_if7()
