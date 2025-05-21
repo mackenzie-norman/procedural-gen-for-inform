@@ -331,7 +331,7 @@ def generate_grid_if7():
             new_row.append(room_b)
         final_rows.append(new_row)
     # now from zipz I want to do the same but columnwise and then combine them
-    # add a decoder.
+    # add a decoder, So BTT has a printed name that is different. This allows us to not have to worry about inform getting confused
     for i in range(len(zipz) - 1):
         middle_row = []
         for x in range(len(zipz[i])):
