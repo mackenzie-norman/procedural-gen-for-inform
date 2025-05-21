@@ -14,6 +14,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import math
+import random
 
 
 def get_direction(x1, y1, x2, y2):
@@ -237,6 +238,35 @@ transit time	destination
     return end_str
 
 
+def nx_to_if7_rooms_exist(
+    G, first_stop=None, bidirectional=False, bus_name="17 bus", max_travel_time=None
+):
+    # TODO directionality
+    max_round = lambda x: max(1, round(x))
+    if max_travel_time:
+        max_round = lambda x: min(max_travel_time, max(1, round(x)))
+    stops = [str(n) for n in G.nodes]
+    if first_stop is None:
+        stop1 = stops.pop(0)
+
+    end_str = f"""\n\nThe {bus_name}  is a relatively-scheduled train-car in {stop1}. The waiting duration of the {bus_name}  is 1 minute. The t-schedule of the {bus_name}  is the Table of {bus_name} Schedule.\n"""
+    end_str += f"""
+Table of {bus_name} Schedule
+transit time	destination
+"""
+    for n in G.edges(data=True):
+        end_str += f"{max_round(n[2]['weight'])} minute\t{n[0]}\n"
+    # have to get the last one
+    n = [n for n in G.edges(data=True)][-1]
+    end_str += f"{max_round(n[2]['weight'])} minute\t{n[1]}\n"
+    if bidirectional:
+        for n in reversed([n for n in G.edges(data=True)]):
+            end_str += f"{max_round(n[2]['weight'])} minute\t{n[0]}\n"
+    # have to get the last one
+
+    return end_str
+
+
 # endsection
 def test17():
     # currently some functions are hardcoded
@@ -297,30 +327,38 @@ def generate_grid_if7():
         for i in range(len(row) - 1):
             room_a = row[i]
             room_b = row[i + 1]
-            new_row.append(f"bt{room_a}andbt{room_b}")
+            new_row.append(f"BTT{room_a}BTT{room_b}")
             new_row.append(room_b)
         final_rows.append(new_row)
     # now from zipz I want to do the same but columnwise and then combine them
-
+    # add a decoder.
     for i in range(len(zipz) - 1):
         middle_row = []
         for x in range(len(zipz[i])):
             room_a = zipz[i][x]
             room_b = zipz[i + 1][x]
-            middle_row.append(f"bt{room_a}andbt{room_b}")
+            middle_row.append(f"BTT{room_a}BTT{room_b}")
             middle_row.append(None)
         final_rows.insert(i * 2 + 1, middle_row)
     end_str = ""
+    map_graph = nx.DiGraph()
     for i in final_rows:
         for room in i:
             if room is not None:
                 end_str += f"{room} is a room.\n"
+                map_graph.add_node(room)
+                if "BTT" in room:
+                    actual_name = f"Between the Corners of {room.split("BTT")[1]} and {room.split("BTT")[2]}"
+                    end_str += f'The printed name of the {room} is "{actual_name}".\n'
+
     end_str += "\n\n"
     # now for connections
     # just write north east conncections
+    positions = {}
     for i, row in enumerate(final_rows):
         for x, room in enumerate(row):
             if room is not None:
+                positions[room] = (i * 2, x * 2)
                 west_conn = None
                 north_conn = None
                 if x > 0:
@@ -332,6 +370,32 @@ def generate_grid_if7():
                     north_conn = final_rows[i - 1][x]
                 if north_conn is not None:
                     end_str += f"{room} is north of {north_conn}.\n"
+    bus_1 = list_to_dg(zipz[0], nx.DiGraph())
+    end_str += nx_to_if7_rooms_exist(
+        bus_1, bus_name="Bus 1", max_travel_time=1, bidirectional=True
+    )
+    map_graph = nx.compose(map_graph, bus_1)
+
+    bus_5 = list_to_dg(zipz[-1], nx.DiGraph())
+    end_str += nx_to_if7_rooms_exist(
+        bus_5, bus_name="Bus 5", max_travel_time=1, bidirectional=True
+    )
+    map_graph = nx.compose(map_graph, bus_5)
+    rows = len(zipz)
+    cols = len(zipz[0])
+    values = [
+        zipz[random.randint(0, rows - 1)][random.randint(0, cols - 1)] for _ in range(6)
+    ]
+
+    bus_7 = list_to_dg(values, nx.DiGraph())
+    end_str += nx_to_if7_rooms_exist(
+        bus_7, bus_name="Bus 7", max_travel_time=1, bidirectional=True
+    )
+    map_graph = nx.compose(map_graph, bus_7)
+
+    nx.draw(map_graph, positions)
+    nx.draw_networkx_labels(map_graph, positions)
+    plt.show()
     print(end_str)
 
 
@@ -378,4 +442,11 @@ def multi_network_generator():
 
 if __name__ == "__main__":
     # multi_network_generator()
+    print(
+        """"demo city grid" by Mackenzies Automated Script
+
+Include Version 6 of Transit System by Emily Short.
+
+"""
+    )
     generate_grid_if7()
